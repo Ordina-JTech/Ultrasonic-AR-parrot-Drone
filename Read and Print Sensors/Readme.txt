@@ -1,0 +1,1 @@
+Prints the value of the ultrasonic sensors via the Python script.
