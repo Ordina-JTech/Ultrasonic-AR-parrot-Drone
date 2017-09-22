@@ -1,35 +1,47 @@
-// HC-SR04-test.ino
+// Distance_Read_One.ino
 // 
-// Get distance information from Ultrasonic Ranging Module HC-SR04 and 
+// Get distance information from Ultrasonic Ranging Modules HC-SR04 and 
 // send it via serial port.
 //
-// electronut.in
+// Authors: Robert Horvers & Evert Poots
 
 #include "Arduino.h"
+#include <medianFilter.h>
+
+medianFilter Filter1;
+medianFilter Filter2;
+medianFilter Filter3;
+medianFilter Filter4;
 
 // Sensor input.
-int pinTrigger1 = 12;
-int pinEcho1 = 11;
-int pinTrigger2 = 10;
-int pinEcho2 = 9;
-
-// LED input.
-int pinGreen = 2;
-int pinYellow = 3;
-int pinRed = 4;
+int pinTrigger1 = 11;
+int pinEcho1 = 10;
+int pinTrigger2 = 13;
+int pinEcho2 = 12;
+int pinTrigger3 = 9;
+int pinEcho3 = 8; 
+int pinTrigger4 = 7;
+int pinEcho4 = 6;
 
 void setup()
 {
   // initialize serial comms
   Serial.begin(9600); 
-
+  Filter1.begin();
+  Filter2 .begin();
+  Filter3.begin();
+  Filter4.begin();
+       
+    
   // set pins 
   pinMode(pinTrigger1, OUTPUT);
   pinMode(pinEcho1, INPUT);
-  pinMode(pinGreen, OUTPUT);
-  pinMode(pinYellow, OUTPUT);
-  pinMode(pinRed, OUTPUT);
-  
+  pinMode(pinTrigger2, OUTPUT);
+  pinMode(pinEcho2, INPUT);
+  pinMode(pinTrigger3, OUTPUT);
+  pinMode(pinEcho3, INPUT);
+  pinMode(pinTrigger4, OUTPUT);
+  pinMode(pinEcho4, INPUT);
 }
 
 int readSensor(int pinTrigger, int pinEcho) {
@@ -54,29 +66,31 @@ float calcDist(int duration) {
 
 void loop()
 {
-  int duration1 = readSensor(pinTrigger1, pinEcho1);
-  int duration2 = readSensor(pinTrigger2, pinEcho2);
-  float distance1 = calcDist(duration1);
-  float distance2 = calcDist(duration2);
   
+  int duration1 = readSensor(pinTrigger1, pinEcho1);
+  delay(50);
+  int duration2 = readSensor(pinTrigger2, pinEcho2);
+  delay(50);
+  int duration3 = readSensor(pinTrigger3, pinEcho3);
+  delay(50);  
+  int duration4 = readSensor(pinTrigger4, pinEcho4);
+  delay(50);
+  
+  float distance1 = Filter1.run(calcDist(duration1));
+  float distance2 = Filter2.run(calcDist(duration2));
+  float distance3 = Filter3.run(calcDist(duration3));
+  float distance4 = Filter4.run(calcDist(duration4));
+
   Serial.print(distance1);
   Serial.print(" ");
-  Serial.println(distance2);
-
-  digitalWrite(pinGreen, LOW);
-  digitalWrite(pinYellow, LOW);
-  digitalWrite(pinRed, LOW);
-    
-  if(distance1 < 50) {
-    digitalWrite(pinRed, HIGH);
-  }
-  else if(distance1 < 100) {
-    digitalWrite(pinYellow, HIGH);
-  }
-  else {
-    digitalWrite(pinGreen, HIGH);
-  }
+  Serial.print(distance2);
+  Serial.print(" ");
+  Serial.print(distance3);
+  Serial.print(" ");
+  Serial.println(distance4);
+  
+  
   // wait 
-  delay(70);
+  //delay(70);
 }
 
