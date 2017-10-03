@@ -1,6 +1,11 @@
+// Add mathmatical functions
+#include "math.h"
+#include <medianFilter.h>
+
+
 // Defining Pins on the Ardunio to the respective Ultrasonic sensors
-#define FRONT_TRIG 11 // Front Sensor Trig to Pin 13
-#define FRONT_ECHO 10 // Front Sensor Echo to Pin 12, VCC 5V and GND are connected on the Ardunio Uno board
+#define FRONT_TRIG 11 
+#define FRONT_ECHO 10 
 #define RIGHT_TRIG 9
 #define RIGHT_ECHO 8
 #define LEFT_TRIG 13   
@@ -10,10 +15,26 @@
 
 // Global variables
 char old_command;          // Old command generated based on ultrasonic distances
-  
+
+// float X,Y;
+
+// Filter to remove large spikes from the sensor input, which can cause irratic behavior for the drone.
+medianFilter FilterFront;
+medianFilter FilterRight;
+medianFilter FilterLeft;
+medianFilter FilterTop;
+
+
+
 // Setting up input and outputs for the pinModes for the each sensor respectively
 void setup() {                 // initializes serial communication
   Serial.begin (9600);         // Open serial monitor at 9600 baud to see ping results.
+
+  FilterFront.begin();
+  FilterRight.begin();
+  FilterLeft.begin();
+  FilterTop.begin();
+  
   pinMode(FRONT_TRIG, OUTPUT); // Output = sonar burst from the ultrasonic sensor to an object
   pinMode(FRONT_ECHO, INPUT);  // Input  = received sound wave reflected from the obstacle
   pinMode(RIGHT_TRIG, OUTPUT);
@@ -22,6 +43,7 @@ void setup() {                 // initializes serial communication
   pinMode(LEFT_ECHO, INPUT);
   pinMode(TOP_TRIG, OUTPUT);
   pinMode(TOP_ECHO, INPUT);
+
 }
 // Serial prints command if it differs from previous command, this is done to reduce buffer on the serial port
 void PrintCommand(char old_c, char new_c){
@@ -30,6 +52,31 @@ void PrintCommand(char old_c, char new_c){
         Serial.print("\n");
     }
 }
+
+/*
+// Reads The variable of the input.
+int readSensor(int pinTrigger, int pinEcho) {
+  // send a 10us+ pulse
+  digitalWrite(pinTrigger, LOW);
+  delayMicroseconds(2);
+  digitalWrite(pinTrigger, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(pinTrigger, LOW);
+  
+  
+  //  read duration of echo 
+  return pulseIn(pinEcho, HIGH);
+}
+
+// The following will calculate the distance.
+float calcDist(int duration) {
+  // dist = duration * speed of sound * 1/2
+  // dist in cm = duration in us * 1 x 10^{-6} * 340.26 * 100 * 1/2
+  // =  0.017*duration
+  return 0.017 * duration;
+}
+*/
+
 void loop() {
   long duration, FRONT, RIGHT, LEFT, TOP; // Duration used to calculate distance of an object from each sensor
  
@@ -40,35 +87,135 @@ void loop() {
   digitalWrite(TOP_TRIG, LOW);            
   duration = pulseIn(TOP_ECHO, HIGH);     // Calculates time taken to receive signal from reflected signal, pulse is LOW when signal is received
   TOP = (duration/2) / 29.1;              // Calculates distances using the time calculated above and the speed of sound (300m/s)
+
+  // Front triggers
   digitalWrite(FRONT_TRIG, LOW);
   delayMicroseconds(2);
   digitalWrite(FRONT_TRIG, HIGH);
   delayMicroseconds(10);
   digitalWrite(FRONT_TRIG, LOW);
   duration = pulseIn(FRONT_ECHO, HIGH);
-  FRONT = (duration/2) / 29.1;  
+  FRONT = round((FilterFront.run((duration/2) / 29.1)/10))*10;  
+
+  // Right Triggers
   digitalWrite(RIGHT_TRIG, LOW);
+  digitalWrite(RIGHT_TRIG, HIGH);  
   delayMicroseconds(2);
-  digitalWrite(RIGHT_TRIG, HIGH);
   delayMicroseconds(10);
   digitalWrite(RIGHT_TRIG, LOW);
   duration = pulseIn(RIGHT_ECHO, HIGH);  
-  RIGHT = (duration/2) / 29.1;
+  RIGHT = round((FilterRight.run((duration/2) / 29.1)/10))*10;
+
+  // Left Triggers
   digitalWrite(LEFT_TRIG, LOW);
   delayMicroseconds(2);
   digitalWrite(LEFT_TRIG, HIGH);
   delayMicroseconds(10);
   digitalWrite(LEFT_TRIG, LOW);
   duration = pulseIn(LEFT_ECHO, HIGH);
-  LEFT = (duration/2) / 29.1;
+  LEFT = round((FilterLeft.run((duration/2) / 29.1)/10))*10;
+
+/* 
+  if (FRONT > 160) {
+      FRONT = 160;
+      X = 0.01*sqrt(FRONT);
+  } 
+  else {
+      X = 1/(-4*sqrt(FRONT));
+  }
+
+ 
+  if (LEFT > 40){
+      LEFT = 40;
+      Y = 0.05*sqrt(LEFT)
+  }
+  else {
+      Y = -0.05*sqrt(Left);
+  }
+  if (RIGHT > 40){
+      RIGHT = 40;
+      Y = -0.05*sqrt(RIGHT); 
+  }
+  else {
+      Y = -0.05*sqrt(RIGHT);
+  }
+*/
   
+  const float sensorRange = 160;
+
+  float rangeClampedFront = 0;
+  if (FRONT < sensorRange) {
+    rangeClampedFront = FRONT;
+  }
+  else {
+    rangeClampedFront = 160;
+  }
+  
+  float rangeClampedLeft = 0;
+  if(LEFT < sensorRange) {
+    rangeClampedLeft = LEFT;
+  }
+  else {
+    rangeClampedLeft = 160;
+  }
+
+  float rangeClampedRight = 0;
+  if(RIGHT < sensorRange) {
+    rangeClampedRight = RIGHT;
+  }
+  else {
+    rangeClampedRight = 160;
+  }
+
+  float compiledFront = rangeClampedFront;
+  float compiledLeft = rangeClampedLeft;
+  float compiledRight = rangeClampedRight;
+
+  float vX = compiledFront;
+  float vY = compiledLeft-compiledRight;
+  
+  Serial.print(vX);
+  Serial.print(" ");
+  Serial.print(vY);
+  Serial.print("\n");
+
+/*
+
+// With These lines the distance will be printed.
+  int duration1 = readSensor(FRONT_TRIG, FRONT_ECHO);
+  delay(50);
+  int duration2 = readSensor(LEFT_TRIG, LEFT_ECHO);
+  delay(50);
+  int duration3 = readSensor(RIGHT_TRIG, RIGHT_ECHO);
+  delay(50);  
+  int duration4 = readSensor(TOP_TRIG, TOP_ECHO);
+  delay(50);
+  
+  float distance1 = calcDist(duration1);
+  float distance2 = calcDist(duration2);
+  float distance3 = calcDist(duration3);
+  float distance4 = calcDist(duration4);
+
+
+  Serial.print(distance1);
+  Serial.print(" ");
+  Serial.print(distance2);
+  Serial.print(" ");
+  Serial.print(distance3);
+  Serial.print(" ");
+  Serial.print(distance4);
+  Serial.print("\n");
+*/
+
 // The following lines are the conditions that print the flight directions for the drone based on spatial data
-    if (TOP < 50) {   
+    if (TOP < 30 && TOP > 0) {   
      PrintCommand(old_command, 'T');                      // If the TOP sensor detects an object less than 50cm from it
      old_command = 'T';  
      Serial.print('T');
-     Serial.print("\n");          // It will print the character T on a new line on the serial monitor if it is different from the previous command
-     }    
+     Serial.print("\n");
+     }
+}
+/*
      else{                                                // If the TOP sensor does not detect an obstacle it will continue to the following      
        if ((RIGHT < 70) && (FRONT > 90)) {                // If the RIGHT sensor detects an object less than 90cm and FRONT sensor is greater than 90cm then to print L
         PrintCommand(old_command, 'L');       // It will print the character L on a new line on the serial monitor if it is different from the previous command
@@ -100,3 +247,4 @@ void loop() {
       }
    }
 }
+*/
