@@ -1,0 +1,13 @@
+(node) warning: possible EventEmitter memory leak detected. 11 listeners added. Use emitter.setMaxListeners() to increase limit.
+Trace
+    at Client.EventEmitter.addListener (events.js:175:15)
+    at Client.EventEmitter.once (events.js:196:8)
+    at Client.land (/data/video/ar-drone/lib/Client.js:200:8)
+    at SerialPort.<anonymous> (/data/video/ar-mainscript:26:11)
+    at SerialPort.EventEmitter.emit (events.js:96:17)
+    at parsers.readline (/data/video/node_modules/node-serialport/serialport.js:36:17)
+    at Array.forEach (native)
+    at Object.parsers.readline [as parser] (/data/video/node_modules/node-serialport/serialport.js:35:13)
+    at process.nextTick.options.dataCallback (/data/video/node_modules/node-serialport/serialport.js:89:15)
+    at EventEmitter.emit (events.js:96:17)
+
