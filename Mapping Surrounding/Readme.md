@@ -1,0 +1,1 @@
+![equation](http://www.sciweavers.org/tex2img.php?eq=x%20%3D%20R%20%5Cast%20cos%28%20%5Cvarphi%20%29%20%5C%5C%0Ay%20%3D%20R%20%5Cast%20sin%28%20%5Cvarphi%20%29&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0)
