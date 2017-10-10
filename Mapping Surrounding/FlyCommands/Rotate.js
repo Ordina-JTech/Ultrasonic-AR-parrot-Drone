@@ -5,6 +5,7 @@
 
 var arDrone = require('./ar-drone/index');
 var client = arDrone.createClient();
+var psi = 0;
 var Project;
 
 // Basic flight Commands
@@ -26,6 +27,16 @@ client.after(1000, function(){
     this.land();
 });
 
+client.config('general:navdata_demo', 'FALSE');
+client.on('navdata', function(navdata) {
+    try {
+        psi = navdata.demo.rotation.psi;
+    }
+    catch(err) {
+        console.log(err.message);
+    }
+});
+
 // Connecting to the serial port to read the output of the arduino.
 var serialport = require('node-serialport')
 var sp = new serialport.SerialPort("/dev/ttyO3", {
@@ -36,7 +47,7 @@ var sp = new serialport.SerialPort("/dev/ttyO3", {
 // Commands acting upon the output of the arduino.
 sp.on('data', function (chunk) {
     Project = chunk.toString();
-    console.log("%s", Project);
+    console.log("%s", Project + ' ' + psi);
     if (Project == 'T') { // Emergency stop command.
         client.stop();
         client.land();
@@ -46,13 +57,3 @@ sp.on('data', function (chunk) {
 });
 
 // Logs navdata of the drone.
-client.config('general:navdata_demo', 'FALSE');
-client.on('navdata', function(navdata) {
-    try {
-        console.log('z:' + navdata.demo.rotation.psi);
-    }
-    catch(err) {
-        console.log(err.message);
-    }
-});
-
