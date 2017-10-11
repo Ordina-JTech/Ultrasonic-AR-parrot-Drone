@@ -117,15 +117,10 @@ void loop() {
     rangeClampedRight = 400;
   }
 
-  // Beetje onnodig dit.
-  float commandFront = rangeClampedFront;
-  float commandLeft = rangeClampedLeft;
-  float commandRight = rangeClampedRight;
-
-  int vX = commandFront;
-  int vY1 = commandLeft;
-  int vY2 = commandRight;
-  int vYmed = commandLeft - commandRight;
+  int vX = rangeClampedFront;
+  int vY1 = rangeClampedLeft;
+  int vY2 = rangeClampedRight;
+  int vYmed = rangeClampedLeft - rangeClampedRight;
 
   Serial.print(vX);
   Serial.print(" ");

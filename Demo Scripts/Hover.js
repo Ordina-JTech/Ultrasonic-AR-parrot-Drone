@@ -14,7 +14,7 @@ client.after(1000, function () {
 var serialport = require('node-serialport')
 var sp = new serialport.SerialPort("/dev/ttyO3", {
     parser: serialport.parsers.readline("\n"),
-    baud: 9600 // Chosen port of the arduino.
+    baud: 9600, // Chosen port of the arduino.
     highWaterMark: 65536
 });
 
@@ -29,7 +29,7 @@ sp.on('data', function (chunk) {
         console.log("Drone Landed\n");
     }
     var values = Project.split(" ");
-    if (values.length == 3) {
+    if (values.length == 4) {
         // Calling sensor values from the ardu
         var x = parseFloat(values[0]);
         var y1 = parseFloat(values[1]);
@@ -37,7 +37,6 @@ sp.on('data', function (chunk) {
 
         if (x <= 50) {
             client.back(0.1);
-            client.front(0);
         } 
         else if (x > 50) {
             client.front(0);
@@ -46,19 +45,15 @@ sp.on('data', function (chunk) {
 
         if (y1 <= 20) {
             client.right(0.1);
-            client.left(0)
         } 
         else if (y1 > 20){
-            client.right(0);
             client.left(0)
         }
 
         if (y2 <= 20) {
             client.left(0.1);
-            client.right(0);
         }
         else if (y2 > 20) {
-            client.left(0);
             client.right(0);
         }
 
