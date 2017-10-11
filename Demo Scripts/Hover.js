@@ -61,8 +61,8 @@ sp.on('data', function (chunk) {
             client.left(0);
             client.right(0);
         }
-
     }
+    sp.flush();
 });
 
 
