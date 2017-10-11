@@ -56,8 +56,8 @@ sp.on('data', function (chunk) {
         else if (y2 > 20) {
             client.right(0);
         }
-
     }
+    sp.flush();
 });
 
 

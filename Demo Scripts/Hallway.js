@@ -51,6 +51,6 @@ sp.on('data', function (chunk) {
         else if (ymed < -20) {
             client.right(0.05);
         }
-
     }
+    sp.flush();
 });
