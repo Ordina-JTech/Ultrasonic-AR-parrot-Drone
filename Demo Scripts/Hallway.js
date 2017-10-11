@@ -29,40 +29,28 @@ sp.on('data', function (chunk) {
         console.log("Drone Landed\n");
     }
     var values = Project.split(" ");
-    if (values.length == 3) {
+    if (values.length == 2) {
         // Calling sensor values from the ardu
         var x = parseFloat(values[0]);
-        var y1 = parseFloat(values[1]);
-        var y2 = parseFloat(values[2]);
+        var ymed = parseFloat(values[3]);
 
         if (x <= 50) {
             client.back(0.1);
-            client.front(0);
         } 
         else if (x > 50) {
-            client.front(0);
-            client.back(0);         
+            client.front(0.1);
         }
 
-        if (y1 <= 20) {
-            client.right(0.1);
-            client.left(0)
-        } 
-        else if (y1 > 20){
-            client.right(0);
-            client.left(0)
-        }
-
-        if (y2 <= 20) {
+        if (ymed > 20) {
             client.left(0.1);
-            client.right(0);
-        }
-        else if (y2 > 20) {
+        } 
+        else if (ymed < 20 && ymed > -20) {
             client.left(0);
             client.right(0);
+        } 
+        else if (ymed < -20) {
+            client.right(0.1);
         }
 
     }
 });
-
-
