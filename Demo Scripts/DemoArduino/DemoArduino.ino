@@ -122,11 +122,11 @@ void loop() {
   float commandLeft = rangeClampedLeft;
   float commandRight = rangeClampedRight;
 
-  float vX = commandFront;
-  float vY1 = commandLeft;
-  float vY2 = commandRight;
-  float vYmed = commandLeft - commandRight;
-  
+  int vX = commandFront;
+  int vY1 = commandLeft;
+  int vY2 = commandRight;
+  int vYmed = commandLeft - commandRight;
+
   Serial.print(vX);
   Serial.print(" ");
   Serial.print(vY1);
@@ -166,8 +166,8 @@ void loop() {
 
 // The following lines are the conditions that print the flight directions for the drone based on spatial data
     if (TOP < 30 && TOP > 0) {   
-     PrintCommand(old_command, 'T');                      // If the TOP sensor detects an object less than 50cm from it
-     old_command = 'T';  
+//     PrintCommand(old_command, 'T');                      // If the TOP sensor detects an object less than 50cm from it
+//     old_command = 'T';  
      Serial.print('T');
      Serial.print("\n");
      }
