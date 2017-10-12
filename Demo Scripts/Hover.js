@@ -11,7 +11,7 @@ client.after(1000, function () {
 });
 
 // Connecting to the serial port to read the output of the arduino.
-var serialport = require('node-serialport')
+var serialport = require('node-serialport');
 var sp = new serialport.SerialPort("/dev/ttyO3", {
     parser: serialport.parsers.readline("\n"),
     baud: 9600, // Chosen port of the arduino.
@@ -36,7 +36,7 @@ sp.on('data', function (chunk) {
         var y2 = parseFloat(values[2]);
 
         if (x <= 50) {
-            client.back(0.1);
+            client.back(0.08);
         } 
         else if (x > 50) {
             client.front(0);
@@ -44,14 +44,14 @@ sp.on('data', function (chunk) {
         }
 
         if (y1 <= 20) {
-            client.right(0.1);
+            client.right(0.08);
         } 
         else if (y1 > 20){
             client.left(0)
         }
 
         if (y2 <= 20) {
-            client.left(0.1);
+            client.left(0.08);
         }
         else if (y2 > 20) {
             client.right(0);
