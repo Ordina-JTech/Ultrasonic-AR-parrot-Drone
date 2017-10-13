@@ -34,21 +34,19 @@ sp.on('data', function (chunk) {
         var x = parseFloat(values[0]);
         var ymed = parseFloat(values[3]);
 
-        if (x <= 50) {
+        if (x <= 100) {
             client.back(0.05);
         } 
-        else if (x > 50) {
+        else if (x > 100) {
             client.front(0.05);
         }
-
-        if (ymed > 20) {
+        if (ymed >= 50) {
             client.left(0.05);
         } 
-        else if (ymed < 20 && ymed > -20) {
+        else if (ymed < 50 && ymed > -50) {
             client.left(0);
-            client.right(0);
         } 
-        else if (ymed < -20) {
+        else if (ymed <= -50) {
             client.right(0.05);
         }
     }

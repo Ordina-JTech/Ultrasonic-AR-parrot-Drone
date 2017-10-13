@@ -6,7 +6,7 @@ var Project;
 client.after(1000, function () {
     this.takeoff(); 
 });
-client.after(1000, function () {
+client.after(3000, function () {
     this.stop();
 });
 
@@ -35,26 +35,23 @@ sp.on('data', function (chunk) {
         var y1 = parseFloat(values[1]);
         var y2 = parseFloat(values[2]);
 
-        if (x <= 50) {
+        if (x <= 100) {
             client.back(0.08);
         } 
-        else if (x > 50) {
+        else if (x > 100) {
             client.front(0);
             client.back(0);         
         }
 
-        if (y1 <= 20) {
+        if (y1 <= 50) {
             client.right(0.08);
         } 
-        else if (y1 > 20){
-            client.left(0)
-        }
-
-        if (y2 <= 20) {
-            client.left(0.08);
-        }
-        else if (y2 > 20) {
+        else if (y1 > 50 && y2 > 50) {
+            client.left(0);
             client.right(0);
+        }
+        if (y2 <= 50) {
+            client.left(0.08);
         }
     }
     sp.flush();
