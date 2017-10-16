@@ -27,39 +27,32 @@ var sp = new serialport.SerialPort("/dev/ttyO3", {
 // Commands acting upon the output of the arduino.
 sp.on('data', function (chunk) {
     Project = chunk.toString();
-    console.log("%s", Project);
-    var values = Project.split(" ");
-    if (values.length == 5) {
-        // Calling sensor values from the arduino.
-        var F = parseFloat(values[0]);
-        var L = parseFloat(values[1]);
-        var R = parseFloat(values[2]);
-        var med = parseFloat(values[3]);
-        var T = parseFloat(values[4]);
-
-        /*
-        if (T <= 10) {
-            client.stop();
-            client.land();
-            client.animateLeds('blinkRed', 5, 2);
-            console.log("Drone Landed\n");
-        }
-        if (F > 100) {
-            client.front(0);
-        } 
-        if (F < 100) {
-            client.back(0.08); 
-            console.log("Retreat");        
-        }
-        if (R < 50) {
-            client.left(0.06);
-            console.log("Evade Left");  
-        }
-        if (L < 50) {
-            client.right(0.06);
-            console.log("Evade Right");  
-        }
-        */
+    P = Project.split(" ")
+    //console.log(Project);
+    F = P[0];
+    L = P[1];
+    R = P[2];
+    T = P[3];
+    if (T <= 10) {
+        client.stop();
+        client.land();
+        client.animateLeds('blinkRed', 5, 2);
+        console.log("Drone Landed\n");
+    }
+    if (F > 100) {
+        client.front(0);
+    } 
+    if (F < 100) {
+        client.back(0.08); 
+        console.log("Retreat");        
+    }
+    if (R < 50) {
+        client.left(0.06);
+        console.log("Evade Left");  
+    }
+    if (L < 50) {
+        client.right(0.06);
+        console.log("Evade Right");  
     }
     sp.flush();
 });
