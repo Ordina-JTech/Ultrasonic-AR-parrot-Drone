@@ -131,36 +131,3 @@ void loop() {
   Serial.print(Top);
   Serial.print("\n");
 }
-/*
-     else{                                                // If the TOP sensor does not detect an obstacle it will continue to the following      
-       if ((RIGHT < 70) && (FRONT > 90)) {                // If the RIGHT sensor detects an object less than 90cm and FRONT sensor is greater than 90cm then to print L
-        PrintCommand(old_command, 'L');       // It will print the character L on a new line on the serial monitor if it is different from the previous command
-        old_command = 'L';            
-       }
-       if ((LEFT < 70) && (FRONT > 90)) {
-        PrintCommand(old_command, 'R');
-        old_command = 'R';  
-       }                                                  // If the FRONT sensor detects an object less than 70cm it will print either of the following
-       if (FRONT > 90 ) {
-        PrintCommand(old_command, 'F');
-        old_command = 'F';
-       }   
-       if (FRONT >= 7 && FRONT <= 40) {
-        PrintCommand(old_command, 'S');
-        old_command = 'S';
-        Serial.print('S');
-        Serial.print("\n");
-       }    
-       else {
-       if ((LEFT < RIGHT) && (FRONT >=10 && FRONT <=79)) {
-        PrintCommand(old_command, 'P');
-        old_command = 'P';
-        }
-       if ((LEFT > RIGHT) && (FRONT >=10 && FRONT <=79)) {
-        PrintCommand(old_command, 'Q');
-        old_command = 'Q';                                                                
-         } 
-      }
-   }
-}
-*/
