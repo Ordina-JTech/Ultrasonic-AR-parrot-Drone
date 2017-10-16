@@ -37,20 +37,20 @@ sp.on('data', function (chunk) {
     var values = Project.split(" ");
     if (values.length == 4) {
         // Calling sensor values from the arduino.
-        var x = parseFloat(values[0]);
-        var y1 = parseFloat(values[1]);
-        var y2 = parseFloat(values[2]);
+        var F = parseFloat(values[0]);
+        var L = parseFloat(values[1]);
+        var R = parseFloat(values[2]);
 
-        if (x > 100) {
+        if (F > 100) {
             client.front(0);
         } 
-        if (x < 100) {
+        if (F < 100) {
             client.back(0.08);         
         }
-        if (y2 < 50) {
+        if (R < 50) {
             client.left(0.06);
         }
-        if (y1 < 50) {
+        if (L < 50) {
             client.right(0.06);
         }
     }

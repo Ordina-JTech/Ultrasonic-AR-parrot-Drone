@@ -174,27 +174,27 @@ void loop() {
         old_command = 'L';            
        }
        if ((LEFT < 70) && (FRONT > 90)) {
-  PrintCommand(old_command, 'R');
+        PrintCommand(old_command, 'R');
         old_command = 'R';  
        }                                                  // If the FRONT sensor detects an object less than 70cm it will print either of the following
        if (FRONT > 90 ) {
-       PrintCommand(old_command, 'F');
-       old_command = 'F';
+        PrintCommand(old_command, 'F');
+        old_command = 'F';
        }   
        if (FRONT >= 7 && FRONT <= 40) {
-  PrintCommand(old_command, 'S');
+        PrintCommand(old_command, 'S');
         old_command = 'S';
         Serial.print('S');
         Serial.print("\n");
        }    
        else {
        if ((LEFT < RIGHT) && (FRONT >=10 && FRONT <=79)) {
-       PrintCommand(old_command, 'P');
-       old_command = 'P';
+        PrintCommand(old_command, 'P');
+        old_command = 'P';
         }
        if ((LEFT > RIGHT) && (FRONT >=10 && FRONT <=79)) {
-       PrintCommand(old_command, 'Q');
-       old_command = 'Q';                                                                
+        PrintCommand(old_command, 'Q');
+        old_command = 'Q';                                                                
          } 
       }
    }
