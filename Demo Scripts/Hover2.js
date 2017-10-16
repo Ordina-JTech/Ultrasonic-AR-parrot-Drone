@@ -41,18 +41,23 @@ sp.on('data', function (chunk) {
         var L = parseFloat(values[1]);
         var R = parseFloat(values[2]);
 
+        /*
         if (F > 100) {
             client.front(0);
         } 
         if (F < 100) {
-            client.back(0.08);         
+            client.back(0.08); 
+            console.log("Retreat");        
         }
         if (R < 50) {
             client.left(0.06);
+            console.log("Evade Left");  
         }
         if (L < 50) {
             client.right(0.06);
+            console.log("Evade Right");  
         }
+        */
     }
     sp.flush();
 });
