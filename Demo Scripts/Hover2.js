@@ -28,19 +28,20 @@ var sp = new serialport.SerialPort("/dev/ttyO3", {
 sp.on('data', function (chunk) {
     Project = chunk.toString();
     console.log("%s", Project);
-    if (Project == 'T') { // Emergency stop command.
-        client.stop();
-        client.land();
-        client.animateLeds('blinkRed', 5, 2);
-        console.log("Drone Landed\n");
-    }
     var values = Project.split(" ");
-    if (values.length == 4) {
+    if (values.length == 5) {
         // Calling sensor values from the arduino.
         var F = parseFloat(values[0]);
         var L = parseFloat(values[1]);
         var R = parseFloat(values[2]);
+        var T = parseFloat(values[4]);
 
+        if (T <= 10) {
+            client.stop();
+            client.land();
+            client.animateLeds('blinkRed', 5, 2);
+            console.log("Drone Landed\n");
+        }
         /*
         if (F > 100) {
             client.front(0);
