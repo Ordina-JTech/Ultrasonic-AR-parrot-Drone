@@ -47,6 +47,11 @@ sp.on('data', function (chunk) {
     if (M >= 20) {
         client.left(0.06);
     }
+
+    if (M >= -20 && M <= 20) {
+        client.right(0)
+        client.left(0)
+    }
     // Top behavior.
     if (T <= 10) {
         client.stop();
@@ -63,18 +68,6 @@ sp.on('data', function (chunk) {
     if (F <= 100) {
         client.back(0.08); 
         console.log("Retreat");        
-    }
-
-    // Right behavior.
-    if (R <= 50) {
-        client.left(0.06);
-        console.log("Evade Left");  
-    }
-
-    // Left Behavior.
-    if (L <= 50) {
-        client.right(0.06);
-        console.log("Evade Right");  
     }
     sp.flush(); // Filter.
 });
