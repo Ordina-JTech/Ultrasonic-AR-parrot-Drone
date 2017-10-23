@@ -13,9 +13,6 @@
 #define TOP_TRIG 7
 #define TOP_ECHO 6
 
-// Global variables
-char old_command;          // Old command generated based on ultrasonic distances
-
 // Filter to remove large spikes from the sensor input, which can cause irratic behavior for the drone.
 medianFilter FilterFront;
 medianFilter FilterRight;
@@ -119,7 +116,6 @@ void loop() {
   int vX = rangeClampedFront;
   int vY1 = rangeClampedLeft;
   int vY2 = rangeClampedRight;
-  int vYmed = rangeClampedLeft - rangeClampedRight;
   int Top = rangeClampedTop;
 
   Serial.print(vX);

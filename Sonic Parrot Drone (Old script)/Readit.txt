@@ -1,0 +1,3 @@
+Old script. Does not work properly. This code causes the drone to respond in an unpredictable way.
+
+Suïcide script.

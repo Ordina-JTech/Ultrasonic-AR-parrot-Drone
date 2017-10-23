@@ -46,22 +46,29 @@ client.on('navdata', function(navdata) {
 });
 
 // Connecting to the serial port to read the output of the arduino.
-var serialport = require('node-serialport');
+var serialport = require('node-serialport'); // Port liberary
 var sp = new serialport.SerialPort("/dev/ttyO3", {
     parser: serialport.parsers.readline("\n"),
-    baud: 9600 // Chosen port of the arduino.
-})
+    baud: 9600, // Chosen port of the arduino.
+    highWaterMark: 65536 // Makes sure it can handle the bit size of the Arduino input.
+});
 
 // Commands acting upon the output of the arduino.
 sp.on('data', function (chunk) {
     Project = chunk.toString();
-    console.log("%s", Project);
-    if (Project == 'T') { // Emergency stop command.
+    P = Project.split(" ")
+    //console.log(Project);
+    F = P[0]; // Front sensort.
+    L = P[1]; // Left sensor.
+    R = P[2]; // Right sensor.
+    T = P[3]; // Top sensor.
+
+    // Top behavior.
+    if (T <= 10) {
         client.stop();
         client.land();
         client.animateLeds('blinkRed', 5, 2);
         console.log("Drone Landed\n");
     }
+    sp.flush(); // Filter.
 });
-
-

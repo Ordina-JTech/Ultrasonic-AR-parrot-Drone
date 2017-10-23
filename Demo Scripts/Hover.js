@@ -1,8 +1,13 @@
+/*
+/ Demo script whereby the drone flies through a hallway and avoid objects and walls.
+/ Object include humans.
+*/
+
 var arDrone = require('./ar-drone/index'); // Library location on drone.
 var client = arDrone.createClient(); 
 var Project;
 
-// Basic flight Commands called from client.
+// Basic flight Commands called from client to stabilize the drone.
 client.after(1000, function () {
     this.takeoff(); 
 })
@@ -43,22 +48,23 @@ sp.on('data', function (chunk) {
     }
 
     // Frontal behavior.
-    if (F > 100) {
+    if (F >= 100) {
         client.front(0);
     } 
-    if (F < 100) {
+
+    if (F <= 100) {
         client.back(0.08); 
         console.log("Retreat");        
     }
 
     // Right behavior.
-    if (R < 50) {
+    if (R <= 50) {
         client.left(0.06);
         console.log("Evade Left");  
     }
 
     // Left Behavior.
-    if (L < 50) {
+    if (L <= 50) {
         client.right(0.06);
         console.log("Evade Right");  
     }
