@@ -40,6 +40,20 @@ sp.on('data', function (chunk) {
     T = P[3]; // Top sensor.
 
     // Top behavior.
+    if (M <= -20) {
+        client.right(0.06);
+    }
+
+    if (M >= 20) {
+        client.left(0.06);
+    }
+
+    // Large because of open space.
+    if (M >= -80 && M <= 80) {
+        client.right(0);
+        client.left(0);
+    }
+    // Top behavior.
     if (T <= 10) {
         client.stop();
         client.land();
@@ -49,24 +63,12 @@ sp.on('data', function (chunk) {
 
     // Frontal behavior.
     if (F >= 100) {
-        client.front(0.08);
+        client.front(0.06);
     } 
 
     if (F <= 100) {
         client.back(0.08); 
         console.log("Retreat");        
-    }
-
-    // Right behavior.
-    if (R <= 20) {
-        client.left(0.06);
-        console.log("Evade Left");  
-    }
-
-    // Left Behavior.
-    if (L <= 20) {
-        client.right(0.06);
-        console.log("Evade Right");  
     }
     sp.flush(); // Filter.
 });
