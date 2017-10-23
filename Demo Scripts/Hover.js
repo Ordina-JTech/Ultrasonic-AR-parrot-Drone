@@ -33,7 +33,7 @@ var sp = new serialport.SerialPort("/dev/ttyO3", {
 sp.on('data', function (chunk) {
     Project = chunk.toString();
     P = Project.split(" ")
-    //console.log(Project);
+    console.log(Project);
     F = P[0]; // Front sensort.
     L = P[1]; // Left sensor.
     R = P[2]; // Right sensor.
@@ -56,17 +56,26 @@ sp.on('data', function (chunk) {
         client.back(0.08); 
         console.log("Retreat");        
     }
+    else {
+        client.back(0);
+    }
 
     // Right behavior.
     if (R <= 50) {
         client.left(0.06);
         console.log("Evade Left");  
     }
+    else {
+        client.left(0);
+    }
 
     // Left Behavior.
     if (L <= 50) {
         client.right(0.06);
         console.log("Evade Right");  
+    }
+    else {
+        client.right(0);
     }
     sp.flush(); // Filter.
 });

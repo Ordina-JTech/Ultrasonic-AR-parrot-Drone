@@ -33,7 +33,7 @@ var sp = new serialport.SerialPort("/dev/ttyO3", {
 sp.on('data', function (chunk) {
     Project = chunk.toString();
     P = Project.split(" ")
-    //console.log(Project);
+    console.log(Project);
     F = P[0]; // Front sensort.
     L = P[1]; // Left sensor.
     R = P[2]; // Right sensor.
