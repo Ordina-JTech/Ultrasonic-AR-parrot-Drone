@@ -38,18 +38,18 @@ sp.on('data', function (chunk) {
     L = P[1]; // Left sensor.
     R = P[2]; // Right sensor.
     T = P[3]; // Top sensor.
+    M = L - R;
 
-    // Top behavior.
-    if (M <= -20) {
+    if (M < -30) {
         client.right(0.06);
     }
 
-    if (M >= 20) {
+    if (M > 30) {
         client.left(0.06);
     }
 
     // Large because of open space.
-    if (M >= -80 && M <= 80) {
+    if (M >= -30 && M <= 30) {
         client.right(0);
         client.left(0);
     }
