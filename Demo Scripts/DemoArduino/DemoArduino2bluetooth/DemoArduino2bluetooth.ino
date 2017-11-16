@@ -1,6 +1,7 @@
 // Add mathmatical functions
 #include "math.h"
 #include <medianFilter.h>
+#include <SoftwareSerial.h>
 
 // Defining Pins on the Ardunio to the respective Ultrasonic sensors
 #define FRONT_TRIG 11 
@@ -11,13 +12,16 @@
 #define LEFT_ECHO 12
 #define TOP_TRIG 7
 #define TOP_ECHO 6
-#define BACK_TRIG 5
-#define BACK_ECHO 4
 
+int counter = 0;
+
+int rxPin = 2;
+int txPin = 3;
+
+SoftwareSerial bluetooth(rxPin, txPin);
 
 // Filter to remove large spikes from the sensor input, which can cause irratic behavior for the drone.
 medianFilter FilterFront;
-medianFilter FilterBack;
 medianFilter FilterRight;
 medianFilter FilterLeft;
 medianFilter FilterTop;
@@ -27,9 +31,9 @@ medianFilter FilterTop;
 // Setting up input and outputs for the pinModes for the each sensor respectively
 void setup() {                 // initializes serial communication
   Serial.begin (9600);         // Open serial monitor at 9600 baud to see ping results.
+  bluetooth.begin(9600); //set baud rate
 
   FilterFront.begin();
-  FilterBack.begin();
   FilterRight.begin();
   FilterLeft.begin();
   FilterTop.begin();
@@ -42,32 +46,20 @@ void setup() {                 // initializes serial communication
   pinMode(LEFT_ECHO, INPUT);
   pinMode(TOP_TRIG, OUTPUT);
   pinMode(TOP_ECHO, INPUT);
-  pinMode(BACK_TRIG, OUTPUT);
-  pinMode(BACK_ECHO, INPUT);
 
 }
 
 void loop() {
-  long duration, FRONT,BACK, RIGHT, LEFT, TOP; // Duration used to calculate distance of an object from each sensor
-
-  // Top triggers.
+  long duration, FRONT, RIGHT, LEFT, TOP; // Duration used to calculate distance of an object from each sensor
+ 
   digitalWrite(TOP_TRIG, LOW);            // LOW triggered to ensure no interference from incoming signals, before triggering HIGH
   delayMicroseconds(2);
   digitalWrite(TOP_TRIG, HIGH);           // Send outs ultrasonic wave
   delayMicroseconds(10);                  // Delay as speicifed by datasheet
   digitalWrite(TOP_TRIG, LOW);            
   duration = pulseIn(TOP_ECHO, HIGH);     // Calculates time taken to receive signal from reflected signal, pulse is LOW when signal is received
-  TOP = round((FilterTop.run((duration/2) / 29.1)/10))*10;               // Calculates distances using the time calculated above and the speed of sound (300m/s)
+  TOP = round((FilterFront.run((duration/2) / 29.1)/10))*10;               // Calculates distances using the time calculated above and the speed of sound (300m/s)
 
-  // Back triggers
-  digitalWrite(BACK_TRIG, LOW);
-  delayMicroseconds(2);
-  digitalWrite(BACK_TRIG, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(BACK_TRIG, LOW);
-  duration = pulseIn(BACK_ECHO, HIGH);
-  BACK = round((FilterBack.run((duration/2) / 29.1)/10))*10;  
-  
   // Front triggers
   digitalWrite(FRONT_TRIG, LOW);
   delayMicroseconds(2);
@@ -104,14 +96,6 @@ void loop() {
   else {
     rangeClampedTop = sensorRange;
   }
-
-  int rangeClampedBack = 0;
-  if (BACK < sensorRange) {
-    rangeClampedBack = BACK;
-  }
-  else {
-    rangeClampedBack = sensorRange;
-  }
   
   int rangeClampedFront = 0;
   if (FRONT < sensorRange) {
@@ -137,20 +121,24 @@ void loop() {
     rangeClampedRight = sensorRange;
   }
 
-  int vX1 = rangeClampedFront;
-  int vX2 = rangeClampedBack;  
+  int vX = rangeClampedFront;
   int vY1 = rangeClampedLeft;
   int vY2 = rangeClampedRight;
   int Top = rangeClampedTop;
 
-  Serial.print(vX1);
+  bluetooth.print(vX);
+  /*
   Serial.print(" ");
-  Serial.print(vX2);
-  Serial.print(" ");  
   Serial.print(vY1);
   Serial.print(" ");
   Serial.print(vY2);
   Serial.print(" ");
   Serial.print(Top);
   Serial.print("\n");
+  
+  counter++;
+  bluetooth.print("Arduino counter: ");
+  bluetooth.println(counter);
+  delay(500); // wait half a sec
+  */
 }

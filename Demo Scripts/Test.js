@@ -1,51 +1,26 @@
 /*
-/ Script which causes the drone to hover and rotate while printing
-/ measuring the distances of the environment it is in.
+/ Demo script whereby the drone hovers and avoid incoming objects.
+/ Object include humans and other meat bags.
 */
 
 var arDrone = require('./ar-drone/index');
 var client = arDrone.createClient();
 var Project;
 
-// Basic flight Commands
-client.takeoff();    
-// This makes sure the drone hovers over the same spot.
-// The drone camera detects the paper shape on the floor.
-client.config('detect:detect_type', 12);
-client.config('control:flying_mode', 2);  
-
-// For hand held turning.
-client.after(10000, function(){
-    this.land();
-});
-
-/*
-// Automated turning. Still deviates to much.
-client.after(5000,function(){
+// Basic flight Commands called from client to stabilize the drone.
+client.after(1000, function () {
+    this.takeoff(); 
+})
+client.after(2000, function () {
     this.stop();
-});
-client.after(2000, function(){
-    this.config('control:flying_mode', 0);  
-    this.clockwise(0.5);
-});
-client.after(1000, function(){
+})
+client.after(500, function() {
+    this.front(0.03);
+})
+client.after(500, function() {
     this.stop();
-    this.land();
-});
-*/
+})
 
-// Logs navdata of the drone.
-client.config('general:navdata_demo', 'FALSE');
-client.on('navdata', function(navdata) {
-    try {
-        psi = navdata.demo.rotation.psi;
-        console.log(psi);
-    }
-    catch(err) {
-        console.log(err.message);
-    }
-});
-/*
 // Connecting to the serial port to read the output of the arduino.
 var serialport = require('node-serialport'); // Port liberary
 var sp = new serialport.SerialPort("/dev/ttyO3", {
@@ -63,7 +38,34 @@ sp.on('data', function (chunk) {
     L = P[1]; // Left sensor.
     R = P[2]; // Right sensor.
     T = P[3]; // Top sensor.
+    M = L - R;
 
+    N = 0.1;
+    if (M > -40 || M < 40) {
+        N = N - 0.01;
+    }
+
+    if (M < -40 || M > 40) {
+        N = N;
+    }
+
+    if (M <-20 || M > 20) {
+        N = 0.3;
+    }
+
+    if (M < -40) {
+        client.right(N);
+    }
+
+    if (M > 40) {
+        client.left(N);
+    }
+
+    // Large because of open space.
+    if (M >= -60 && M <= 60) {
+        client.right(0);
+        client.left(0);
+    }
     // Top behavior.
     if (T <= 10) {
         client.stop();
@@ -71,6 +73,11 @@ sp.on('data', function (chunk) {
         client.animateLeds('blinkRed', 5, 2);
         console.log("Drone Landed\n");
     }
+
+    // Frontal behavior.
+    if (F <= 100) {
+        client.back(0.08); 
+        console.log("Retreat");        
+    }
     sp.flush(); // Filter.
 });
-*/
