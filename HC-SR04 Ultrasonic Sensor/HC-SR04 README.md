@@ -12,6 +12,7 @@
 
 ### Layout:
 
+![Imgur Image](https://i.imgur.com/HSZxOEh.png)
 
 Source: L.B. Evans and Bass, Tables of Absorption and Velocity of Sound in Still Air at
 68F Wyle Laboratories, Report WR72-2, January-1972.
