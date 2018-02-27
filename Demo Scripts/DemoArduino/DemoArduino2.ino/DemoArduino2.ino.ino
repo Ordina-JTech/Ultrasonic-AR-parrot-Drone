@@ -144,6 +144,7 @@ void loop() {
   int Top = rangeClampedTop;
 
   Serial.print(vX1);
+  /*
   Serial.print(" ");
   Serial.print(vX2);
   Serial.print(" ");  
@@ -152,5 +153,6 @@ void loop() {
   Serial.print(vY2);
   Serial.print(" ");
   Serial.print(Top);
+  */
   Serial.print("\n");
 }
