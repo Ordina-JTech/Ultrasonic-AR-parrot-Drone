@@ -3,6 +3,8 @@
 ### By Robert Horvers & Evert Poots
 ### Ordina Software Development JTech
 
+![alt text](https://imgur.com/SVWl69D)
+
 WARNING: WORK IN PROGRESS! This project was inspired by https://github.com/vdkd888/droneproject whereby the goal is to make the drone more autonomous by utilizing ultrasonic sensors and camera's. With these sensors and utilizing deep learning methodes the drone should be able to fly it's own path without human interference. At the same time the drone will map it's surrounding. The project Hack-A-Drone, https://github.com/roberthorvers/hack-a-drone, will be applied to this project whereby the autonomous drones shall fly as a swarm. 
 
 - Arduino Code adapted from: http://howtomechatronics.com/tutorials/arduino/ultrasonic-sensor-hc-sr04/
