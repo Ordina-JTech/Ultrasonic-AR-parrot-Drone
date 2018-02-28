@@ -10,7 +10,7 @@
 - Angle of measurment = 15 degree.
 - Dimension of sensor = 4x2x1.5 cm.
 
-The sensor has a quartz cristal that vibrates at 40 kHz. There are four pins on the sensor. A trigger pin, echo pin, ground pin and a power pin.
+The sensor has a quartz crystal that vibrates at 40 kHz. There are four pins on the sensor. A trigger pin, echo pin, ground pin and a power pin.
 
 ![Imgur Image size](https://i.imgur.com/5PE67Qv.png)
 
