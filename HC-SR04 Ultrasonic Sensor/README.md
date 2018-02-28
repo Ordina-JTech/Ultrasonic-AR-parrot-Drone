@@ -16,6 +16,8 @@ The sensor has a quartz crystal that vibrates at 40 kHz. There are four pins on 
 
 Source: [Store link](https://www.fabtolab.com/HC-SR04-ultrasonic)
 
+The trigger and echo pin can be connected any Arduino pin, just make sure they are correctly defined in the arduino script.
+
 ### Layout:
 
 ![Imgur Image](https://i.imgur.com/HSZxOEh.png)
