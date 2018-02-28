@@ -12,7 +12,7 @@
 
 The sensor has a quartz cristal that vibrates at 40 kHz. There are four pins on the sensor. A trigger pin, echo pin, ground pin and a power pin.
 
-![Imgur Image size](https://i.imgur.com/3MnlZmc.png){:height="50%" width="50%"}
+![Imgur Image size](https://i.imgur.com/3MnlZmc.pngl)
 
 Source: [Store link](https://www.fabtolab.com/HC-SR04-ultrasonic)
 
