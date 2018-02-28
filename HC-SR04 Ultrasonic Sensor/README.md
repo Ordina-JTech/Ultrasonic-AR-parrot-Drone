@@ -20,3 +20,5 @@ Source: L.B. Evans and Bass, Tables of Absorption and Velocity of Sound in Still
 ### Error margin
 
 1. Sensor measurement is not truly monotonic. The first peak of the pulses is missed, causing an error of 1 centimeter. More info on: [HC-SR04, David Pilling](https://www.davidpilling.com/wiki/index.php/HCSR04).
+
+2. If the distance increases, the measurment deviations increase. More on this can be found here: [Accuracy and resolution tests](https://forum.arduino.cc/index.php?topic=243076.0).
